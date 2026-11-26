@@ -9,10 +9,12 @@ namespace Collections
     {
         public static int ReadInt32(string prompt, int minValue, int maxValue)
         {
+            bool isNumber;
+            int value;
             while (true)
             {
                 Console.Write(prompt);
-                var isNumber = int.TryParse(ReadLine(), CultureInfo.InvariantCulture, out var value);
+                isNumber = int.TryParse(ReadLine(), CultureInfo.InvariantCulture, out value);
                 if (isNumber && value >= minValue && value <= maxValue)
                 {
                     return value;
@@ -24,10 +26,11 @@ namespace Collections
 
         public static List<int> ReadIntList(string prompt)
         {
+            List<int> numbers;
             while (true)
             {
                 Console.Write(prompt);
-                if (TryParseIntList(ReadLine(), out var numbers))
+                if (TryParseIntList(ReadLine(), out numbers))
                 {
                     return numbers;
                 }
@@ -39,9 +42,10 @@ namespace Collections
         private static bool TryParseIntList(string text, out List<int> numbers)
         {
             numbers = new List<int>();
+            int number;
             foreach (var part in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
             {
-                if (!int.TryParse(part, CultureInfo.InvariantCulture, out var number))
+                if (!int.TryParse(part, CultureInfo.InvariantCulture, out number))
                 {
                     return false;
                 }

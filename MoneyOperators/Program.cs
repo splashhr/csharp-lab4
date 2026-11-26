@@ -21,10 +21,11 @@ namespace MoneyOperators
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
+            long choice;
             while (true)
             {
                 Console.WriteLine(Menu);
-                var choice = ReadInt64("Пункт: ", 0, 5);
+                choice = ReadInt64("Пункт: ", 0, 5);
                 if (choice == 0)
                 {
                     return;
@@ -136,11 +137,14 @@ namespace MoneyOperators
 
         private static long ReadInt64(string prompt, long minValue, long maxValue)
         {
+            string text;
+            bool isNumber;
+            long value;
             while (true)
             {
                 Console.Write(prompt);
-                var text = Console.ReadLine() ?? throw new EndOfStreamException("Ввод с клавиатуры закончился.");
-                var isNumber = long.TryParse(text, CultureInfo.InvariantCulture, out var value);
+                text = Console.ReadLine() ?? throw new EndOfStreamException("Ввод с клавиатуры закончился.");
+                isNumber = long.TryParse(text, CultureInfo.InvariantCulture, out value);
                 if (isNumber && value >= minValue && value <= maxValue)
                 {
                     return value;

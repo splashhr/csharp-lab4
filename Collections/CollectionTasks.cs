@@ -105,9 +105,11 @@ namespace Collections
 
             var grownOnce = new HashSet<string>();
             var grownTwiceOrMore = new HashSet<string>();
+            var repeated = new HashSet<string>();
             foreach (var cooperative in cooperatives)
             {
-                var repeated = new HashSet<string>(cooperative);
+                repeated.Clear();
+                repeated.UnionWith(cooperative);
                 repeated.IntersectWith(grownOnce);
                 grownTwiceOrMore.UnionWith(repeated);
                 grownOnce.UnionWith(cooperative);
@@ -143,14 +145,18 @@ namespace Collections
 
             using var writer = new StreamWriter(path);
             writer.WriteLine(count.ToString(CultureInfo.InvariantCulture));
+            string surname;
+            string name;
+            int school;
+            int score;
             for (var index = 0; index < count; index++)
             {
-                var surname = s_surnames[random.Next(s_surnames.Length)];
-                var name = s_names[random.Next(s_names.Length)];
-                var school = s_schools[random.Next(s_schools.Length)];
-                var score = random.Next(MinScore, MaxScore + 1);
-                var line = string.Format(CultureInfo.InvariantCulture, "{0} {1} {2} {3}", surname, name, school, score);
-                writer.WriteLine(line);
+                surname = s_surnames[random.Next(s_surnames.Length)];
+                name = s_names[random.Next(s_names.Length)];
+                school = s_schools[random.Next(s_schools.Length)];
+                score = random.Next(MinScore, MaxScore + 1);
+                writer.WriteLine(
+                    string.Format(CultureInfo.InvariantCulture, "{0} {1} {2} {3}", surname, name, school, score));
             }
         }
 
@@ -167,16 +173,19 @@ namespace Collections
             var sums = new SortedList<int, int>();
             var counts = new SortedList<int, int>();
             var totalScore = 0;
+            string[] parts;
+            int school;
+            int score;
             for (var index = 1; index <= count; index++)
             {
-                var parts = lines[index].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                parts = lines[index].Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length != 4)
                 {
                     throw new InvalidDataException($"Строка {index + 1}: нужен формат «Фамилия Имя Школа Балл».");
                 }
 
-                var school = ParseInt(parts[2], index + 1, MinSchool, MaxSchool);
-                var score = ParseInt(parts[3], index + 1, MinScore, MaxScore);
+                school = ParseInt(parts[2], index + 1, MinSchool, MaxSchool);
+                score = ParseInt(parts[3], index + 1, MinScore, MaxScore);
                 if (!sums.ContainsKey(school))
                 {
                     sums.Add(school, 0);
@@ -190,12 +199,13 @@ namespace Collections
 
             districtAverage = (double)totalScore / count;
             var result = new SortedList<int, double>();
-            foreach (var school in sums.Keys)
+            double average;
+            foreach (var schoolNumber in sums.Keys)
             {
-                var average = (double)sums[school] / counts[school];
+                average = (double)sums[schoolNumber] / counts[schoolNumber];
                 if (average > districtAverage)
                 {
-                    result.Add(school, average);
+                    result.Add(schoolNumber, average);
                 }
             }
 

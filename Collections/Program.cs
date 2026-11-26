@@ -40,10 +40,11 @@ namespace Collections
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
+            int taskNumber;
             while (true)
             {
                 Console.WriteLine(Menu);
-                var taskNumber = ConsoleInput.ReadInt32("Номер задания: ", 0, 5);
+                taskNumber = ConsoleInput.ReadInt32("Номер задания: ", 0, 5);
                 if (taskNumber == 0)
                 {
                     return;
